@@ -1,8 +1,7 @@
 References style which should create the Springer Humanties Style (https://resource-cms.springernature.com/springer-cms/rest/v1/content/40196/data/References+Humanities+Style).
 
-changelog (Johannes Schäfer):
-
-- used the chicago.bst from https://ctan.ebinger.cc/tex-archive/biblio/bibtex/contrib/chicago/
+changelog .bst file:
+- started with chicago.bst from https://ctan.ebinger.cc/tex-archive/biblio/bibtex/contrib/chicago/
 - renamed file to modchicago.bst
 - removed parentheses around year in list of references
 - removed comma from in-text citations ("(Nelson, 2005)" -> "(Nelson 2005)")
@@ -14,5 +13,6 @@ changelog (Johannes Schäfer):
 - changed chapter+pages formatting from "Chapter <number>, <pages>" to "<number>: <pages>"
 - added support for field url (also doi/arXiv/pubmed) using this script: https://nxg.me.uk/dist/urlbst/
 - removed the string "URL: " in front of urls
+- changed dot after authors only to be set if authors do not end with a dot already
+- abbreviated all first names and removed spaces in entries with mutliple first names
 
-- TODO: abbreviated second names with dot, no additional dot before year after abbreviated second names (only happens if only one author) -> check title: there it does not add a dot if the title ends in one

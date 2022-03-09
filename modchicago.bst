@@ -436,8 +436,9 @@ FUNCTION {output.check.colon}
 FUNCTION {output.year.check}
    { year empty$
    { "empty year in " cite$ * warning$ }
-   { write$
-      ". " year * extra.label *
+   { add.period$ 
+     write$
+      " " year * extra.label *
      month empty$
      { }
       { ", " * month * }
@@ -563,8 +564,8 @@ FUNCTION {format.names}
     { namesleft #0 > }
 
     { nameptr #1 =
-        {s nameptr "{vv~}{ll}{, jj}{, ff}" format.name$ 't := }
-        {s nameptr "{ff~}{vv~}{ll}{, jj}" format.name$ 't := }
+        {s nameptr "{vv~}{ll}{, jj}{, f{.}.}" format.name$ 't := }
+        {s nameptr "{f{.}.~}{vv~}{ll}{, jj}" format.name$ 't := }
       if$
       nameptr #1 >
         { namesleft #1 >
