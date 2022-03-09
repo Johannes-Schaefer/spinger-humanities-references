@@ -12,6 +12,7 @@ changelog (Johannes Schäfer):
 - removed "In" from booktitle formatting (for inproceedings/incollection)
 - changed formatting of mentioned pages from "pp. " to ": "
 - changed chapter+pages formatting from "Chapter <number>, <pages>" to "<number>: <pages>"
-  -> TODO: remove space here???
-- TODO: abbreviated names
-- TODO: punct before year after abbreviated names (only if multiple authors)
+- added support for field url (also doi/arXiv/pubmed) using this script: https://nxg.me.uk/dist/urlbst/
+- removed the string "URL: " in front of urls
+
+- TODO: abbreviated second names with dot, no additional dot before year after abbreviated second names (only happens if only one author) -> check title: there it does not add a dot if the title ends in one
