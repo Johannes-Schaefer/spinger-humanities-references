@@ -404,7 +404,7 @@ FUNCTION {format.names}
                 if$
                 t "others" =
                     { " et~al." * }
-                    { " and " * t * } % from Chicago Manual of Style
+                    { " und " * t * } % from Chicago Manual of Style
                   if$
                }
                if$
@@ -434,7 +434,7 @@ FUNCTION {my.full.label}
                 if$
                 t "others" =
                     { " et~al." * }
-                    { " and " * t * } % from Chicago Manual of Style
+                    { " und " * t * } % from Chicago Manual of Style
                   if$
                }
                if$
@@ -470,7 +470,7 @@ FUNCTION {format.names.fml}
                   if$
                   t "others" =
                         { " et~al." * }
-                        { " and " * t * }
+                        { " und " * t * }
 %                       { " \& " * t * }
                       if$
                 }
@@ -509,8 +509,8 @@ FUNCTION {format.editors.fml}
     { "" }
     { editor format.names.fml
       editor num.names$ #1 >
-    { " (Eds.)" * }
-    { " (Ed.)" * }
+    { " (Hg.)" * }
+    { " (Hg.)" * }
       if$
     }
   if$
@@ -524,8 +524,8 @@ FUNCTION {format.editors}
     { "" }
     { editor format.names
       editor num.names$ #1 >
-    { " (Eds.)" * }
-    { " (Ed.)" * }
+    { " (Hg.)" * }
+    { " (Hg.)" * }
       if$
     }
   if$
@@ -680,8 +680,12 @@ FUNCTION {format.pages}
 { pages empty$
   { "" }
   { pages multi.page.check
-	{ "pp.\ " pages n.dashify tie.or.space.connect } % gnp - removed ()
-	{ "pp.\ " pages tie.or.space.connect }
+%	{ "pp.\ " pages n.dashify tie.or.space.connect } % gnp - removed ()
+	{ ":" * pages n.dashify tie.or.space.connect } % gnp - removed ()
+%	{ ":" * pages n.dashify} % gnp - removed ()
+%	{ "pp.\ " pages tie.or.space.connect }
+	{ ":" * pages tie.or.space.connect }
+%	{ ":" * pages }
     if$
   }
   if$
@@ -702,14 +706,16 @@ FUNCTION {format.jour.vol}
     { volume empty$
        { "no number and no volume in " cite$ * warning$
          "" * }
-       { "~{\em " * Volume * "}" * }
+%       { "~{\em " * Volume * "}" * }
+       { " " * Volume * "" * }
       if$
     }
     { volume empty$
       {"no volume for " cite$ * warning$
        "~(" * number * ")" * }
       { "~" *
-        volume emphasize.space
+%        volume emphasize.space
+        volume
         "(" * number * ")" * * }
       if$
     }
@@ -719,7 +725,7 @@ FUNCTION {format.jour.vol}
      "" * } % gnp - place a null string on the stack for output
     { duplicate$ empty$
       { pop$ format.pages }
-      { ", " *  pages n.dashify * } % gnp - removed pp. for articles
+      { ":" *  pages n.dashify * } % gnp - removed pp. for articles
       if$
     }
   if$
@@ -729,13 +735,15 @@ FUNCTION {format.chapter.pages}
 { chapter empty$
     'format.pages
     { type empty$
-        { "Chapter" } % gnp - changed to mixed case
+%        { "Chapter" } % gnp - changed to mixed case
+        { "" } % gnp - changed to mixed case
         { type "t" change.case$ }
       if$
       chapter tie.or.space.connect
       pages empty$
         {"page numbers missing in " cite$ * warning$} % gnp - added check
-        { ", " * format.pages * }
+%        { ", " * format.pages * }
+        { "" * format.pages * }
       if$
     }
   if$
@@ -745,8 +753,10 @@ FUNCTION {format.in.ed.booktitle}
 { booktitle empty$
   { "" }
   { editor empty$
-    { "In " format.emphasize.booktitle * }
-    { "In " format.editors.fml * ", " * format.emphasize.booktitle * }
+%    { "In " format.emphasize.booktitle * }
+    { " " format.emphasize.booktitle * }
+%    { "In " format.editors.fml * ", " * format.emphasize.booktitle * }
+    { " " format.editors.fml * ", " * format.emphasize.booktitle * }
     if$
   }
   if$
@@ -786,7 +796,7 @@ FUNCTION {format.crossref.editor}
     'skip$
     { editor #2 "{ff }{vv }{ll}{ jj}" format.name$ "others" =
         { " et~al." * }
-        { " and " * editor #2 "{vv~}{ll}" format.name$ * }
+        { " und " * editor #2 "{vv~}{ll}" format.name$ * }
       if$
     }
       if$
@@ -854,7 +864,7 @@ FUNCTION {format.lab.names}
 	{ nameptr numnames =
 	    { s nameptr "{ff }{vv }{ll}{ jj}" format.name$ "others" =
 		{ " et~al." * }
-		{ " and " * s nameptr "{vv~}{ll}" format.name$ * }
+		{ " und " * s nameptr "{vv~}{ll}" format.name$ * }
 	      if$
 	    }
 	    { ", " * s nameptr "{vv~}{ll}" format.name$ * }
