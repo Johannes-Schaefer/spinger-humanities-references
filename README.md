@@ -1,4 +1,6 @@
-# References style which should create the Springer Humanties Style (https://resource-cms.springernature.com/springer-cms/rest/v1/content/40196/data/References+Humanities+Style).
+# BibTex style for the Springer Humanties Style (German)
+
+Springer Humanties Style: https://resource-cms.springernature.com/springer-cms/rest/v1/content/40196/data/References+Humanities+Style
 
 ## changelog .bst file:
 - started with chicago.bst from https://ctan.ebinger.cc/tex-archive/biblio/bibtex/contrib/chicago/
