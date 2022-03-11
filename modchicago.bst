@@ -786,6 +786,14 @@ FUNCTION {tie.or.space.connect}
   swap$ * *
 }
 
+FUNCTION {fake.tie.or.space.connect}
+{ duplicate$ text.length$ #3 <
+    { "" }
+    { "" }
+  if$
+  swap$ * *
+}
+
 FUNCTION {either.or.check}
 { empty$
     'pop$
@@ -853,10 +861,11 @@ FUNCTION {format.pages}
   { "" }
   { pages multi.page.check
 %	{ "pp.\ " pages n.dashify tie.or.space.connect } % gnp - removed ()
-	{ ":" * pages n.dashify tie.or.space.connect } % gnp - removed ()
+%	{ ":" * pages n.dashify tie.or.space.connect } % gnp - removed ()
+	{ ":" * pages n.dashify fake.tie.or.space.connect} % gnp - removed ()
 %	{ ":" * pages n.dashify} % gnp - removed ()
 %	{ "pp.\ " pages tie.or.space.connect }
-	{ ":" * pages tie.or.space.connect }
+	{ ":" * pages fake.tie.or.space.connect }
 %	{ ":" * pages }
     if$
   }

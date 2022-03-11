@@ -1,6 +1,6 @@
-References style which should create the Springer Humanties Style (https://resource-cms.springernature.com/springer-cms/rest/v1/content/40196/data/References+Humanities+Style).
+# References style which should create the Springer Humanties Style (https://resource-cms.springernature.com/springer-cms/rest/v1/content/40196/data/References+Humanities+Style).
 
-changelog .bst file:
+## changelog .bst file:
 - started with chicago.bst from https://ctan.ebinger.cc/tex-archive/biblio/bibtex/contrib/chicago/
 - renamed file to modchicago.bst
 - removed parentheses around year in list of references
@@ -15,4 +15,16 @@ changelog .bst file:
 - removed the string "URL: " in front of urls
 - changed dot after authors only to be set if authors do not end with a dot already
 - abbreviated all first names and removed spaces in entries with mutliple first names
+- removed all spaces in front of page numbers
 
+## Usage:
+If you want to use this style, simply save the modchicago.bst file in the folder of your .tex file and add the following to your preamble:
+```
+\usepackage[authoryear,round]{natbib}
+\setcitestyle{aysep={}}
+```
+
+Now you should be able to select the style as follows:
+```
+\bibliographystyle{modchicago}
+```
