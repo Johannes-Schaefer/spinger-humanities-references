@@ -620,6 +620,7 @@ FUNCTION {my.full.label}
 
 }
 
+
 FUNCTION {format.names.fml}
 %
 % Format names in "familiar" format, with first initial followed by
@@ -937,7 +938,8 @@ FUNCTION {format.in.ed.booktitle}
 %    { "In " format.emphasize.booktitle * }
     { " " format.emphasize.booktitle * }
 %    { "In " format.editors.fml * ", " * format.emphasize.booktitle * }
-    { " " format.editors.fml * ", " * format.emphasize.booktitle * }
+%    { " " format.editors.fml * ", " * format.emphasize.booktitle * }
+    { " " format.emphasize.booktitle * ". " * format.editors.fml * }
     if$
   }
   if$
@@ -1797,10 +1799,8 @@ FUNCTION {chop.word}
   if$
 }
 
-
-
-FUNCTION {sort.format.names}
-{ 's :=
+FUNCTION {sort.format.names.original}
+{ 's := 
   #1 'nameptr :=
   ""
   s num.names$ 'numnames :=
@@ -1819,6 +1819,15 @@ FUNCTION {sort.format.names}
       namesleft #1 - 'namesleft :=
     }
   while$
+}
+
+
+FUNCTION {sort.format.names}
+{ 's :=
+  s num.names$ #0 >
+    { s #1 "{vv{ } }{ll{ }}{  f{ }}{  jj{ }}" format.name$ sortify }
+    { "" }
+  if$
 }
 
 FUNCTION {sort.format.title}
@@ -1917,7 +1926,64 @@ FUNCTION {editor.organization.sort}
   if$
 }
 
-FUNCTION {presort}
+
+FUNCTION {my.full.label.onlyfirstauthor}
+{  's :=
+  s num.names$ #0 >
+    { s #1 "{vv{ } }{ll{ }}{  f{ }}{  jj{ }}" format.name$ sortify }
+    { "" }
+  if$
+}
+
+FUNCTION {calc.label.onlyfirstauthor}
+%
+% Changed - GNP. See also author.organization.sort, editor.organization.sort
+% Form label for BibTeX entry. The classification of which fields are used
+% for which type of entry (book, inbook, etc.) are taken from alpha.bst.
+% The change here from newapa is to also include organization as a
+% citation label if author or editor is missing.
+%
+{ type$ "book" =
+  type$ "inbook" =
+  or
+    'author.editor.key.label
+    { type$ "proceedings" =
+	'editor.key.organization.label
+	{ type$ "manual" =
+	    'author.key.organization.label
+	    'author.key.label
+	  if$
+	}
+      if$
+    }
+  if$
+
+  author empty$  % generate the full label citation information.
+    { editor empty$
+        { organization empty$
+           { "no author, editor, or organization in " cite$ * warning$
+             "??" }
+           { organization }
+           if$
+        }
+        { editor my.full.label }
+        if$
+    }
+    { author my.full.label.onlyfirstauthor }
+  if$
+
+% leave label on the stack, to be popped when required.
+
+  "}{" * swap$ * "}{" *
+%  year field.or.null purify$ #-1 #4 substring$ *
+%
+% save the year for sort processing afterwards (adding a, b, c, etc.)
+%
+  year field.or.null purify$ #-1 #4 substring$
+  'label.year :=
+}
+
+FUNCTION {presort.original}
 %
 % Presort creates the bibentry's label via a call to calc.label, and then
 % sorts the entries based on entry type. Chicago.bst adds support for
@@ -1955,6 +2021,45 @@ FUNCTION {presort}
   'sort.key$ :=
 }
 
+FUNCTION {presort}
+%
+% Presort creates the bibentry's label via a call to calc.label, and then
+% sorts the entries based on entry type. Chicago.bst adds support for
+% including organizations as the sort key; the following is stolen from
+% alpha.bst.
+%
+%{ calc.label sortify % recalculate bibitem label
+{ calc.label.onlyfirstauthor sortify % modified JS
+  year field.or.null purify$ #-1 #4 substring$ * % add year
+  "    "
+  *
+  type$ "book" =
+  type$ "inbook" =
+  or
+    'author.editor.sort
+    { type$ "proceedings" =
+	'editor.organization.sort
+	{ type$ "manual" =
+	    'author.organization.sort
+	    'author.sort
+	  if$
+	}
+      if$
+    }
+  if$
+  #1 entry.max$ substring$        % added for newapa
+  'sort.label :=                  % added for newapa
+  sort.label                      % added for newapa
+  *
+  "    "
+  *
+%  title field.or.null
+%  sort.format.title
+%  *
+  #1 entry.max$ substring$
+  'sort.key$ :=
+}
+
 ITERATE {presort}
 
 SORT             % by label, year, author/editor, title
@@ -1969,7 +2074,7 @@ FUNCTION {initialize.extra.label.stuff}
   #0 'last.extra.num :=
 }
 
-FUNCTION {forward.pass}
+FUNCTION {forward.pass.original}
 %
 % Pass through all entries, comparing current entry to last one.
 % Need to concatenate year to the stack (done by calc.label) to determine
@@ -1989,6 +2094,26 @@ FUNCTION {forward.pass}
   if$
 }
 
+FUNCTION {forward.pass}
+%
+% Pass through all entries, comparing current entry to last one.
+% Need to concatenate year to the stack (done by calc.label) to determine
+% if two entries are the same (see presort)
+%
+{ last.label
+  calc.label.onlyfirstauthor year field.or.null purify$ #-1 #4 substring$ * % add year
+  #1 entry.max$ substring$ =     % are they equal?
+     { last.extra.num #1 + 'last.extra.num :=
+       last.extra.num int.to.chr$ 'extra.label :=
+     }
+     { "a" chr.to.int$ 'last.extra.num :=
+       "" 'extra.label :=
+       calc.label.onlyfirstauthor year field.or.null purify$ #-1 #4 substring$ * % add year
+       #1 entry.max$ substring$ 'last.label := % assign to last.label
+     }
+  if$
+}
+
 FUNCTION {reverse.pass}
 { next.extra "b" =
     { "a" 'extra.label := }
@@ -2000,9 +2125,12 @@ FUNCTION {reverse.pass}
 
 EXECUTE {initialize.extra.label.stuff}
 
-ITERATE {forward.pass}
+%ITERATE {forward.pass}
+%REVERSE {reverse.pass}
 
-REVERSE {reverse.pass}
+REVERSE {forward.pass}
+
+ITERATE {reverse.pass}
 
 FUNCTION {bib.sort.order}
 { sort.label

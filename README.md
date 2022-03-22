@@ -18,6 +18,9 @@ Springer Humanties Style: https://resource-cms.springernature.com/springer-cms/r
 - changed dot after authors only to be set if authors do not end with a dot already
 - abbreviated all first names and removed spaces in entries with mutliple first names
 - removed all spaces in front of page numbers
+- changed sorting to only use the first author name + year
+- reversed order of forward.pass and reverse.pass to get the correct order in cases where a character is added to a year
+- changed order of display of editors to appear after the name of the collection
 
 ## Usage:
 If you want to use this style, simply save the modchicago.bst file in the folder of your .tex file and add the following to your preamble:
