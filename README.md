@@ -1,6 +1,8 @@
 # BibTex style for the Springer Humanties Style (German)
 
-Springer Humanties Style: https://resource-cms.springernature.com/springer-cms/rest/v1/content/40196/data/References+Humanities+Style
+Contains a BibTex style which attempts to follow the Springer Humanties Style for German articles.
+
+Springer Humanties Style reference: https://resource-cms.springernature.com/springer-cms/rest/v1/content/40196/data/References+Humanities+Style
 
 ## changelog .bst file:
 - started with chicago.bst from https://ctan.ebinger.cc/tex-archive/biblio/bibtex/contrib/chicago/
@@ -21,6 +23,7 @@ Springer Humanties Style: https://resource-cms.springernature.com/springer-cms/r
 - changed sorting to only use the first author name + year
 - reversed order of forward.pass and reverse.pass to get the correct order in cases where a character is added to a year
 - changed order of display of editors to appear after the name of the collection
+- expanded doi prefix string to full url
 
 ## Usage:
 If you want to use this style, simply save the modchicago.bst file in the folder of your .tex file and add the following to your preamble:
